@@ -1,5 +1,6 @@
     import User from "../models/user.js";
     import bcrypt from "bcrypt";
+    import generateToken from "../utils/generateToken.js";
 
     async function registerUser(req, res) {
         try {
@@ -35,6 +36,37 @@
         }
     }
 
-    export default registerUser;
+    async function loginUser(req, res) {
+        try {
+            const {email, password} = req.body;
+
+            if(!email || !password){
+                return res.status(400).json({ message: "All fields required" })
+            }
+
+            const normalizedEmail = email.toLowerCase();
+
+            const user = await User.findOne({email: normalizedEmail});
+            if (!user) {
+                return res.status(401).json({ message: "Invalid credentials" })
+            }
+
+            const isPasswordValid = await bcrypt.compare(password, user.password);
+            if (!isPasswordValid) {
+                return res.status(401).json({ message: "Invalid credentials" })
+            }
+
+            const token = generateToken(user._id);
+            return res.status(200).json({ message: "Login Successful", token });
+        }
+        catch (error) {
+            res.status(500).json({ message: error.message });
+        }
+    }
+
+
+    export { registerUser, loginUser };
+
+
 
 
