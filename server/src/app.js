@@ -1,5 +1,6 @@
 import express from 'express'
 import authRoutes from './routes/authRoutes.js';
+import testRoutes from './routes/testRoutes.js';
 
 const app = express()
 
@@ -13,5 +14,7 @@ app.get('/api/health', (req, res) => {
         message: "Server is running"
     })
 })
+
+app.use('/api/test', testRoutes);
 
 export default app;
