@@ -1,6 +1,7 @@
 import express from 'express'
 import authRoutes from './routes/authRoutes.js';
 import testRoutes from './routes/testRoutes.js';
+import groupRoutes from './routes/groupRoutes.js';
 
 const app = express()
 
@@ -16,5 +17,6 @@ app.get('/api/health', (req, res) => {
 })
 
 app.use('/api/test', testRoutes);
+app.use('/api/groups', groupRoutes);
 
 export default app;
